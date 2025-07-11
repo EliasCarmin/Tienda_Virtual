@@ -33,6 +33,25 @@
     <footer>
         <p>&copy; 2024 Tienda Hombre. Todos los derechos reservados.</p>
     </footer>
+    <div id="modal-eliminado" class="modal-resumen" style="display:none;">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" id="cerrar-modal-eliminado">&times;</span>
+            <h2>Producto eliminado del carrito</h2>
+            <div id="resumen-eliminado"></div>
+            <button id="cerrar-eliminado">Cerrar</button>
+        </div>
+    </div>
+    <div id="modal-vaciar" class="modal-resumen" style="display:none;">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" id="cerrar-modal-vaciar">&times;</span>
+            <h2>¿Vaciar carrito?</h2>
+            <p>¿Estás seguro de que deseas eliminar todos los productos del carrito?</p>
+            <div style="margin-top:20px;">
+                <button id="confirmar-vaciar" class="btn-modal btn-confirmar">Sí, vaciar</button>
+                <button id="cancelar-vaciar" class="btn-modal btn-cancelar">Cancelar</button>
+            </div>
+        </div>
+    </div>
     <script src="js/main.js"></script>
 </body>
 </html> 

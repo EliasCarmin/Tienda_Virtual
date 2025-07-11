@@ -56,13 +56,15 @@ function mostrarCarrito() {
     const vaciarBtn = document.createElement('button');
     vaciarBtn.className = 'vaciar-carrito';
     vaciarBtn.textContent = 'Vaciar carrito';
-    vaciarBtn.onclick = vaciarCarrito;
+    vaciarBtn.onclick = mostrarModalVaciar;
     carritoDiv.appendChild(vaciarBtn);
     ul.addEventListener('click', function(e) {
         if (e.target.classList.contains('eliminar-item')) {
             const id = parseInt(e.target.getAttribute('data-id'));
-            if (confirm('¿Seguro que deseas eliminar este producto del carrito?')) {
-                eliminarDelCarrito(id);
+            const carritoActual = JSON.parse(localStorage.getItem('carrito')) || [];
+            const producto = carritoActual.find(item => item.id === id);
+            if (producto) {
+                mostrarModalEliminado(producto);
             }
         }
         if (e.target.classList.contains('cantidad-mas')) {
@@ -82,10 +84,8 @@ function eliminarDelCarrito(id) {
     mostrarCarrito();
 }
 function vaciarCarrito() {
-    if (confirm('¿Seguro que deseas vaciar el carrito?')) {
-        localStorage.removeItem('carrito');
-        mostrarCarrito();
-    }
+    localStorage.removeItem('carrito');
+    mostrarCarrito();
 }
 function cambiarCantidad(id, delta) {
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -118,4 +118,64 @@ if (typeof animarBoton === 'function') {
         oldAnimarBoton(productoId);
         mostrarNotificacion('¡Producto agregado al carrito!');
     }
-} 
+}
+
+function mostrarModalEliminado(producto) {
+    const modal = document.getElementById('modal-eliminado');
+    const resumen = document.getElementById('resumen-eliminado');
+    if (modal && resumen) {
+        resumen.innerHTML = `
+            <img src="${producto.imagen}" alt="${producto.nombre}" style="width:80px;height:80px;object-fit:cover;">
+            <h3>${producto.nombre}</h3>
+            <p><strong>Precio:</strong> $${producto.precio.toFixed(2)}</p>
+            <p>Se eliminó del carrito.</p>
+        `;
+        modal.style.display = 'block';
+        // Guardar el id para eliminar al cerrar
+        modal.setAttribute('data-id-eliminar', producto.id);
+    }
+}
+
+function mostrarModalVaciar() {
+    const modal = document.getElementById('modal-vaciar');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modalEliminado = document.getElementById('modal-eliminado');
+    const cerrarEliminado = document.getElementById('cerrar-modal-eliminado');
+    const cerrarBtnEliminado = document.getElementById('cerrar-eliminado');
+    function cerrarModalEliminado() {
+        if (modalEliminado) {
+            const id = parseInt(modalEliminado.getAttribute('data-id-eliminar'));
+            if (!isNaN(id)) {
+                eliminarDelCarrito(id);
+                modalEliminado.removeAttribute('data-id-eliminar');
+            }
+            modalEliminado.style.display = 'none';
+        }
+    }
+    if (cerrarEliminado) cerrarEliminado.onclick = cerrarModalEliminado;
+    if (cerrarBtnEliminado) cerrarBtnEliminado.onclick = cerrarModalEliminado;
+    window.onclick = function(event) {
+        if (event.target === modalEliminado) cerrarModalEliminado();
+        if (event.target === modalVaciar) cerrarModalVaciar();
+    };
+
+    // Modal vaciar carrito
+    const modalVaciar = document.getElementById('modal-vaciar');
+    const cerrarVaciar = document.getElementById('cerrar-modal-vaciar');
+    const confirmarVaciar = document.getElementById('confirmar-vaciar');
+    const cancelarVaciar = document.getElementById('cancelar-vaciar');
+    function cerrarModalVaciar() {
+        if (modalVaciar) modalVaciar.style.display = 'none';
+    }
+    if (cerrarVaciar) cerrarVaciar.onclick = cerrarModalVaciar;
+    if (cancelarVaciar) cancelarVaciar.onclick = cerrarModalVaciar;
+    if (confirmarVaciar) confirmarVaciar.onclick = function() {
+        vaciarCarrito();
+        cerrarModalVaciar();
+    };
+}); 

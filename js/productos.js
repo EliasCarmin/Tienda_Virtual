@@ -10,7 +10,7 @@ const productos = [
         id: 2,
         nombre: "Pantalón Chino Gris",
         precio: 49.99,
-        imagen: "https://images.unsplash.com/photo-1526178613658-3f1622045557?auto=format&fit=crop&w=400&q=80",
+        imagen: "images/pantalon_chino_gris.png",
         descripcion: "Pantalón versátil para cualquier ocasión."
     },
     {
@@ -38,7 +38,7 @@ const productos = [
         id: 6,
         nombre: "Casaca de Cuero",
         precio: 129.99,
-        imagen: "https://images.unsplash.com/photo-1469398715555-76331a6c7c9b?auto=format&fit=crop&w=400&q=80",
+        imagen: "images/cuero.jpg",
         descripcion: "Casaca de cuero genuino, estilo urbano y elegante."
     },
     {
@@ -59,7 +59,7 @@ const productos = [
         id: 9,
         nombre: "Short Deportivo",
         precio: 19.99,
-        imagen: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80",
+        imagen: "images/short.jpg",
         descripcion: "Short cómodo para entrenar o descansar."
     },
     {
@@ -124,7 +124,44 @@ function agregarAlCarrito(productoId) {
     }
     guardarCarrito(carrito);
     animarBoton(productoId);
+    mostrarModalResumen(producto, existe ? existe.cantidad : 1);
 }
+
+function mostrarModalResumen(producto, cantidad) {
+    const modal = document.getElementById('modal-resumen');
+    const resumen = document.getElementById('resumen-producto');
+    if (modal && resumen) {
+        resumen.innerHTML = `
+            <img src="${producto.imagen}" alt="${producto.nombre}" style="width:80px;height:80px;object-fit:cover;">
+            <h3>${producto.nombre}</h3>
+            <p>${producto.descripcion}</p>
+            <p><strong>Precio:</strong> $${producto.precio.toFixed(2)}</p>
+            <p><strong>Cantidad en carrito:</strong> ${cantidad}</p>
+        `;
+        modal.style.display = 'block';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('modal-resumen');
+    const cerrar = document.getElementById('cerrar-modal');
+    const continuar = document.getElementById('continuar-comprando');
+    if (cerrar) {
+        cerrar.onclick = function() {
+            modal.style.display = 'none';
+        };
+    }
+    if (continuar) {
+        continuar.onclick = function() {
+            modal.style.display = 'none';
+        };
+    }
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+});
 function animarBoton(productoId) {
     const btn = document.querySelector(`.agregar-carrito[data-id='${productoId}']`);
     if (btn) {
