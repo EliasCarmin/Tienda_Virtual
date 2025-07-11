@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Virtual - Inicio</title>
+    <title>Contacto - Tienda Hombre</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -23,15 +23,30 @@
         </nav>
     </header>
     <main>
-        <section class="hero">
-            <h1>Bienvenido a Tienda Hombre</h1>
-            <p>Moda elegante y casual para el hombre moderno</p>
-            <a href="productos.html" class="btn">Ver productos</a>
+        <section class="contacto">
+            <h1>Contacto</h1>
+            <form id="form-contacto" novalidate>
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje</label>
+                    <textarea id="mensaje" name="mensaje" required></textarea>
+                </div>
+                <button type="submit" class="btn">Enviar</button>
+                <div id="form-mensaje"></div>
+            </form>
         </section>
     </main>
     <footer>
         <p>&copy; 2024 Tienda Hombre. Todos los derechos reservados.</p>
     </footer>
     <script src="js/main.js"></script>
+    <script src="js/validacion.js"></script>
 </body>
-</html>
+</html> 
